@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fancy Text Generator - 80+ stylish fonts and text decorations, organized by category.">
+    <title>Fancy Text Generator</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ---------- Theme variables ---------- */
+        :root {
+            --accent-1: #667eea;
+            --accent-2: #764ba2;
+            --accent-fg: #5a6fd8;
+            --accent-chip-bg: rgba(102, 126, 234, 0.12);
+            --card-bg: rgba(255, 255, 255, 0.72);
+            --card-border: rgba(255, 255, 255, 0.55);
+            --input-border: rgba(35, 35, 80, 0.15);
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --chip-bg: rgba(255, 255, 255, 0.65);
+            --toolbar-bg: rgba(255, 255, 255, 0.55);
+            --text: #24243e;
+            --muted: #6b7280;
+            --shadow: 0 8px 30px rgba(31, 38, 135, 0.15);
+            --bg1: #667eea;
+            --bg2: #764ba2;
+            --bg3: #e96492;
+            --blob1: rgba(255, 255, 255, 0.30);
+            --blob2: rgba(255, 130, 200, 0.32);
+            --blob3: rgba(130, 200, 255, 0.28);
+            --head-text: rgba(255, 255, 255, 0.96);
+        }
+
+        body[data-theme="dark"] {
+            --accent-fg: #a6b4ff;
+            --accent-chip-bg: rgba(130, 140, 255, 0.18);
+            --card-bg: rgba(22, 22, 46, 0.62);
+            --card-border: rgba(255, 255, 255, 0.13);
+            --input-border: rgba(255, 255, 255, 0.16);
+            --input-bg: rgba(255, 255, 255, 0.08);
+            --chip-bg: rgba(255, 255, 255, 0.08);
+            --toolbar-bg: rgba(16, 16, 38, 0.55);
+            --text: #ecebff;
+            --muted: #9aa0c3;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.40);
+            --bg1: #191932;
+            --bg2: #2a1b4d;
+            --bg3: #3a1e63;
+            --blob1: rgba(140, 110, 255, 0.20);
+            --blob2: rgba(255, 80, 180, 0.12);
+            --blob3: rgba(60, 180, 255, 0.13);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            background: linear-gradient(120deg, var(--bg1), var(--bg2), var(--bg3), var(--bg1));
+            background-size: 300% 300%;
+            animation: bgShift 20s ease infinite;
+        }
+
+        @keyframes bgShift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ---------- Floating background blobs ---------- */
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .blob-1 { width: 460px; height: 460px; top: -140px; left: -140px; background: var(--blob1); animation: drift 26s ease-in-out infinite alternate; }
+        .blob-2 { width: 380px; height: 380px; top: 30%; right: -160px; background: var(--blob2); animation: drift 32s ease-in-out infinite alternate-reverse; }
+        .blob-3 { width: 420px; height: 420px; bottom: -180px; left: 25%; background: var(--blob3); animation: drift 38s ease-in-out infinite alternate; }
+
+        @keyframes drift {
+            from { transform: translate(0, 0) rotate(0deg) scale(1); }
+            to   { transform: translate(70px, -50px) rotate(25deg) scale(1.12); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ---------- Header ---------- */
+        header {
+            text-align: center;
+            margin: 34px 0 26px;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #ffffff, #ffd9f3, #c7f0ff, #ffffff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            animation: shine 7s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 1.05rem;
+            margin-top: 6px;
+        }
+
+        /* ---------- Shared glass card ---------- */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        /* ---------- Theme toggle ---------- */
+        .theme-btn {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-size: 1.25rem;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-btn:hover { transform: rotate(20deg) scale(1.08); }
+
+        /* ---------- Input card ---------- */
+        .input-card {
+            padding: 22px 24px;
+            margin-bottom: 18px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .input-wrap { position: relative; }
+
+        #textInput {
+            width: 100%;
+            padding: 13px 42px 13px 14px;
+            border: 2px solid var(--input-border);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: var(--input-bg);
+            color: var(--text);
+            outline: none;
+            transition: all 0.25s;
+        }
+
+        #textInput:focus {
+            border-color: var(--accent-1);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.18);
+        }
+
+        #textInput::placeholder { color: var(--muted); }
+
+        .clear-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(125, 125, 160, 0.18);
+            color: var(--text);
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .clear-btn:hover { background: rgba(125, 125, 160, 0.32); }
+
+        .char-count {
+            margin-top: 8px;
+            font-size: 0.82rem;
+            color: var(--muted);
+            text-align: right;
+        }
+        .char-count.warn { color: #ff9f43; font-weight: 600; }
+
+        /* ---------- Sticky toolbar (categories + search) ---------- */
+        .toolbar {
+            position: sticky;
+            top: 10px;
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 12px 16px;
+            border-radius: 16px;
+            background: var(--toolbar-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow);
+            margin-bottom: 6px;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .chip {
+            padding: 8px 13px;
+            border-radius: 999px;
+            border: 1px solid var(--card-border);
+            background: var(--chip-bg);
+            color: var(--text);
+            font-size: 0.84rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.25s;
+            user-select: none;
+        }
+        .chip:hover { transform: translateY(-2px); border-color: var(--accent-1); }
+        .chip.active {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.40);
+        }
+        .chip .cnt {
+            background: rgba(0, 0, 0, 0.10);
+            border-radius: 999px;
+            padding: 1px 8px;
+            font-size: 0.7rem;
+        }
+        body[data-theme="dark"] .chip .cnt { background: rgba(255, 255, 255, 0.16); }
+        .chip.active .cnt { background: rgba(255, 255, 255, 0.25); }
+
+        .search-wrap { position: relative; }
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.85rem;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        #searchInput {
+            width: 230px;
+            padding: 9px 14px 9px 34px;
+            border-radius: 999px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text);
+            font-size: 0.88rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.25s;
+        }
+        #searchInput:focus {
+            border-color: var(--accent-1);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.18);
+        }
+        #searchInput::placeholder { color: var(--muted); }
+
+        /* ---------- Sections & cards ---------- */
+        .style-section { margin-top: 26px; }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 13px;
+        }
+        .section-head h2 {
+            font-size: 1.06rem;
+            font-weight: 700;
+            color: var(--head-text);
+        }
+        .sec-count {
+            background: rgba(255, 255, 255, 0.22);
+            color: var(--head-text);
+            font-size: 0.72rem;
+            padding: 2px 9px;
+            border-radius: 999px;
+        }
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.45), transparent);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 14px;
+        }
+
+        .style-card {
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+        }
+        .style-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-1);
+            box-shadow: 0 10px 26px rgba(102, 126, 234, 0.25);
+        }
+
+        .grid.anim .style-card {
+            animation: cardIn 0.4s both;
+            animation-delay: calc(var(--i, 0) * 30ms);
+        }
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .style-chip {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            color: var(--accent-fg);
+            background: var(--accent-chip-bg);
+            padding: 3px 10px;
+            border-radius: 999px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: #fff;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 9px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.25s;
+            flex-shrink: 0;
+        }
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.40);
+        }
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+
+        .fancy-text {
+            font-size: 1.12rem;
+            word-break: break-all;
+            line-height: 1.55;
+            cursor: pointer;
+            min-height: 1.5em;
+            transition: color 0.2s;
+        }
+        .fancy-text:hover { color: var(--accent-fg); }
+
+        .preview-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--chip-bg);
+            border: 1px dashed var(--card-border);
+            padding: 6px 14px;
+            border-radius: 999px;
+            color: var(--text);
+            font-size: 0.8rem;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .empty-msg {
+            background: var(--card-bg);
+            border: 1px dashed var(--card-border);
+            border-radius: 14px;
+            padding: 28px;
+            text-align: center;
+            color: var(--text);
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* ---------- Footer & toast ---------- */
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.85rem;
+            margin: 42px 0 10px;
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 26px;
+            transform: translate(-50%, 90px);
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: #fff;
+            padding: 11px 22px;
+            border-radius: 999px;
+            box-shadow: 0 8px 24px rgba(46, 204, 113, 0.40);
+            font-weight: 600;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: all 0.35s;
+            z-index: 200;
+            pointer-events: none;
+        }
+        .toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+        /* ---------- Scrollbar ---------- */
+        ::-webkit-scrollbar { width: 11px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+        }
+
+        ::selection { background: rgba(102, 126, 234, 0.35); color: #fff; }
+
+        /* ---------- Ad placements ---------- */
+        .ad-box {
+            display: flex;
+            max-width: 100%;
+            margin: 26px auto;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+        .ad-box > * {
+            flex: 0 0 auto;
+            margin: 0 auto;
+        }
+        .ad-box iframe { border: 0; }
+        #stylesArea1b > .style-section:first-child,
+        #stylesArea2 > .style-section:first-child,
+        #stylesArea2b > .style-section:first-child { margin-top: 8px; }
+
+        /* ---------- Sticky side ads (wide desktop screens only) ---------- */
+        .ad-side {
+            display: none;
+            position: fixed;
+            top: 110px;
+            width: 300px;
+            max-height: 620px;
+            overflow: hidden;
+            z-index: 30;
+        }
+        .ad-side.left  { left: 12px; }
+        .ad-side.right { right: 12px; }
+        @media (min-width: 1600px) {
+            .ad-side { display: flex; flex-direction: column; }
+        }
+
+        /* ---------- Mobile: shrink 728px banners so the full ad is visible ---------- */
+        @media (max-width: 767px) and (min-width: 561px) {
+            .ad-box > iframe { zoom: 0.7; }
+        }
+        @media (max-width: 560px) {
+            .ad-box > iframe { zoom: 0.48; }
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 720px) {
+            h1 { font-size: 1.9rem; }
+            .toolbar { top: 6px; padding: 10px 12px; }
+            .search-wrap { flex: 1 1 100%; }
+            #searchInput { width: 100%; }
+        }
+        @media (max-width: 680px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle dark / light theme">🌙</button>
+
+    <!-- ======= SIDE ADS · NEW CODE (wide desktop screens) ======= -->
+    <div class="ad-side left" id="sideAdL">
+        <script src="https://pl28303055.profitableratecpmnetwork.com/3a/ff/48/3aff481eb36e428d423382f34c31cda8.js"></script>
+    </div>
+    <div class="ad-side right" id="sideAdR">
+        <script src="https://pl28303055.profitableratecpmnetwork.com/3a/ff/48/3aff481eb36e428d423382f34c31cda8.js"></script>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Fancy Text Generator</h1>
+            <p class="subtitle">Type once, get <b id="totalStyles">50</b> fancy styles — copy &amp; paste anywhere 💜</p>
+        </header>
+
+        <!-- ======= TOP AD ======= -->
+        <div class="ad-box">
+            <script>
+              atOptions = {
+                'key' : '23a56f26f1aeb56b2cea9294cf3b3024',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highrevenueformat.com/23a56f26f1aeb56b2cea9294cf3b3024/invoke.js"></script>
+        </div>
+
+        <!-- ======= TOP AD · NEW CODE ======= -->
+        <div class="ad-box" id="topAdN">
+            <script src="https://pl28303055.profitableratecpmnetwork.com/3a/ff/48/3aff481eb36e428d423382f34c31cda8.js"></script>
+        </div>
+
+        <section class="glass-card input-card">
+            <label for="textInput" class="input-label">Enter Your Text</label>
+            <div class="input-wrap">
+                <input type="text" id="textInput" placeholder="Type something here..." maxlength="100" autocomplete="off" spellcheck="false">
+                <button class="clear-btn" id="clearBtn" type="button" aria-label="Clear text">✕</button>
+            </div>
+            <div class="char-count"><span id="charCount">0</span> / 100 characters</div>
+        </section>
+
+        <div class="toolbar">
+            <div class="chips" id="chips"></div>
+            <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search styles..." aria-label="Search styles" autocomplete="off" spellcheck="false">
+            </div>
+        </div>
+
+        <main id="stylesArea"></main>
+
+        <!-- ======= MIDDLE AD 1 ======= -->
+        <div class="ad-box" id="midAdA">
+            <script>
+              atOptions = {
+                'key' : '23a56f26f1aeb56b2cea9294cf3b3024',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highrevenueformat.com/23a56f26f1aeb56b2cea9294cf3b3024/invoke.js"></script>
+        </div>
+
+        <div id="stylesArea1b"></div>
+
+        <!-- ======= MIDDLE AD 2 ======= -->
+        <div class="ad-box" id="midAd">
+            <script>
+              atOptions = {
+                'key' : '23a56f26f1aeb56b2cea9294cf3b3024',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highrevenueformat.com/23a56f26f1aeb56b2cea9294cf3b3024/invoke.js"></script>
+        </div>
+
+        <div id="stylesArea2"></div>
+
+        <!-- ======= MIDDLE AD · NEW CODE ======= -->
+        <div class="ad-box" id="midAdN">
+            <script src="https://pl28303055.profitableratecpmnetwork.com/3a/ff/48/3aff481eb36e428d423382f34c31cda8.js"></script>
+        </div>
+
+        <!-- ======= MIDDLE AD 3 ======= -->
+        <div class="ad-box" id="midAdC">
+            <script>
+              atOptions = {
+                'key' : '23a56f26f1aeb56b2cea9294cf3b3024',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highrevenueformat.com/23a56f26f1aeb56b2cea9294cf3b3024/invoke.js"></script>
+        </div>
+
+        <div id="stylesArea2b"></div>
+
+        <!-- ======= BOTTOM AD ======= -->
+        <div class="ad-box">
+            <script>
+              atOptions = {
+                'key' : '23a56f26f1aeb56b2cea9294cf3b3024',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highrevenueformat.com/23a56f26f1aeb56b2cea9294cf3b3024/invoke.js"></script>
+        </div>
+
+        <!-- ======= BOTTOM AD · NEW CODE ======= -->
+        <div class="ad-box" id="bottomAdN">
+            <script src="https://pl28303055.profitableratecpmnetwork.com/3a/ff/48/3aff481eb36e428d423382f34c31cda8.js"></script>
+        </div>
+
+        <footer class="footer">Made with 💜 · Fancy Text Generator</footer>
+
+        <!-- ======= END AD ======= -->
+        <div class="ad-box">
+            <script>
+              atOptions = {
+                'key' : '23a56f26f1aeb56b2cea9294cf3b3024',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highrevenueformat.com/23a56f26f1aeb56b2cea9294cf3b3024/invoke.js"></script>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">✓ Copied to clipboard!</div>
+
+    <script>
+        /* =====================================================
+           Character maps
+        ===================================================== */
+        const MAP = {
+            bold: {
+                'a': '𝗮', 'b': '𝗯', 'c': '𝗰', 'd': '𝗱', 'e': '𝗲', 'f': '𝗳', 'g': '𝗴', 'h': '𝗵',
+                'i': '𝗶', 'j': '𝗷', 'k': '𝗸', 'l': '𝗹', 'm': '𝗺', 'n': '𝗻', 'o': '𝗼', 'p': '𝗽',
+                'q': '𝗾', 'r': '𝗿', 's': '𝘀', 't': '𝘁', 'u': '𝘂', 'v': '𝘃', 'w': '𝘄', 'x': '𝘅',
+                'y': '𝘆', 'z': '𝘇', 'A': '𝗔', 'B': '𝗕', 'C': '𝗖', 'D': '𝗗', 'E': '𝗘', 'F': '𝗙',
+                'G': '𝗚', 'H': '𝗛', 'I': '𝗜', 'J': '𝗝', 'K': '𝗞', 'L': '𝗟', 'M': '𝗠', 'N': '𝗡',
+                'O': '𝗢', 'P': '𝗣', 'Q': '𝗤', 'R': '𝗥', 'S': '𝗦', 'T': '𝗧', 'U': '𝗨', 'V': '𝗩',
+                'W': '𝗪', 'X': '𝗫', 'Y': '𝗬', 'Z': '𝗭', '0': '𝟬', '1': '𝟭', '2': '𝟮', '3': '𝟯',
+                '4': '𝟰', '5': '𝟱', '6': '𝟲', '7': '𝟳', '8': '𝟴', '9': '𝟵', '!': '！', '?': '？'
+            },
+            italic: {
+                'a': '𝘢', 'b': '𝘣', 'c': '𝘤', 'd': '𝘥', 'e': '𝘦', 'f': '𝘧', 'g': '𝘨', 'h': '𝘩',
+                'i': '𝘪', 'j': '𝘫', 'k': '𝘬', 'l': '𝘭', 'm': '𝘮', 'n': '𝘯', 'o': '𝘰', 'p': '𝘱',
+                'q': '𝘲', 'r': '𝘳', 's': '𝘴', 't': '𝘵', 'u': '𝘶', 'v': '𝘷', 'w': '𝘸', 'x': '𝘹',
+                'y': '𝘺', 'z': '𝘻', 'A': '𝘈', 'B': '𝘉', 'C': '𝘊', 'D': '𝘋', 'E': '𝘌', 'F': '𝘍',
+                'G': '𝘎', 'H': '𝘏', 'I': '𝘐', 'J': '𝘑', 'K': '𝘒', 'L': '𝘓', 'M': '𝘔', 'N': '𝘕',
+                'O': '𝘖', 'P': '𝘗', 'Q': '𝘘', 'R': '𝘙', 'S': '𝘚', 'T': '𝘛', 'U': '𝘜', 'V': '𝘝',
+                'W': '𝘞', 'X': '𝘟', 'Y': '𝘠', 'Z': '𝘡'
+            },
+            boldItalic: {
+                'a': '𝙖', 'b': '𝙗', 'c': '𝙘', 'd': '𝙙', 'e': '𝙚', 'f': '𝙛', 'g': '𝙜', 'h': '𝙝',
+                'i': '𝙞', 'j': '𝙟', 'k': '𝙠', 'l': '𝙡', 'm': '𝙢', 'n': '𝙣', 'o': '𝙤', 'p': '𝙥',
+                'q': '𝙦', 'r': '𝙧', 's': '𝙨', 't': '𝙩', 'u': '𝙪', 'v': '𝙫', 'w': '𝙬', 'x': '𝙭',
+                'y': '𝙮', 'z': '𝙯', 'A': '𝘼', 'B': '𝘽', 'C': '𝘾', 'D': '𝘿', 'E': '𝙀', 'F': '𝙁',
+                'G': '𝙂', 'H': '𝙃', 'I': '𝙄', 'J': '𝙅', 'K': '𝙆', 'L': '𝙇', 'M': '𝙈', 'N': '𝙉',
+                'O': '𝙊', 'P': '𝙋', 'Q': '𝙌', 'R': '𝙍', 'S': '𝙎', 'T': '𝙏', 'U': '𝙐', 'V': '𝙑',
+                'W': '𝙒', 'X': '𝙓', 'Y': '𝙔', 'Z': '𝙕'
+            },
+            monospace: {
+                'a': '𝚊', 'b': '𝚋', 'c': '𝚌', 'd': '𝚍', 'e': '𝚎', 'f': '𝚏', 'g': '𝚐', 'h': '𝚑',
+                'i': '𝚒', 'j': '𝚓', 'k': '𝚔', 'l': '𝚕', 'm': '𝚖', 'n': '𝚗', 'o': '𝚘', 'p': '𝚙',
+                'q': '𝚚', 'r': '𝚛', 's': '𝚜', 't': '𝚝', 'u': '𝚞', 'v': '𝚟', 'w': '𝚠', 'x': '𝚡',
+                'y': '𝚢', 'z': '𝚣', 'A': '𝙰', 'B': '𝙱', 'C': '𝙲', 'D': '𝙳', 'E': '𝙴', 'F': '𝙵',
+                'G': '𝙶', 'H': '𝙷', 'I': '𝙸', 'J': '𝙹', 'K': '𝙺', 'L': '𝙻', 'M': '𝙼', 'N': '𝙽',
+                'O': '𝙾', 'P': '𝙿', 'Q': '𝚀', 'R': '𝚁', 'S': '𝚂', 'T': '𝚃', 'U': '𝚄', 'V': '𝚅',
+                'W': '𝚆', 'X': '𝚇', 'Y': '𝚈', 'Z': '𝚉', '0': '𝟶', '1': '𝟷', '2': '𝟸', '3': '𝟹',
+                '4': '𝟺', '5': '𝟻', '6': '𝟼', '7': '𝟽', '8': '𝟾', '9': '𝟿'
+            },
+            script: {
+                'a': '𝒶', 'b': '𝒷', 'c': '𝒸', 'd': '𝒹', 'e': '𝑒', 'f': '𝒻', 'g': '𝓰', 'h': '𝒽',
+                'i': '𝒾', 'j': '𝒿', 'k': '𝓀', 'l': '𝓁', 'm': '𝓂', 'n': '𝓃', 'o': '𝑜', 'p': '𝓅',
+                'q': '𝓆', 'r': '𝓇', 's': '𝓈', 't': '𝓉', 'u': '𝓊', 'v': '𝓋', 'w': '𝓌', 'x': '𝓍',
+                'y': '𝓎', 'z': '𝓏', 'A': '𝒜', 'B': '𝐵', 'C': '𝒞', 'D': '𝒟', 'E': '𝐸', 'F': '𝐹',
+                'G': '𝒢', 'H': '𝐻', 'I': '𝐼', 'J': '𝒥', 'K': '𝒦', 'L': '𝐿', 'M': '𝑀', 'N': '𝒩',
+                'O': '𝒪', 'P': '𝒫', 'Q': '𝒬', 'R': '𝑅', 'S': '𝒮', 'T': '𝒯', 'U': '𝒰', 'V': '𝒱',
+                'W': '𝒲', 'X': '𝒳', 'Y': '𝒴', 'Z': '𝒵'
+            },
+            boldScript: {
+                'a': '𝓪', 'b': '𝓫', 'c': '𝓬', 'd': '𝓭', 'e': '𝓮', 'f': '𝓯', 'g': '𝓰', 'h': '𝓱',
+                'i': '𝓲', 'j': '𝓳', 'k': '𝓴', 'l': '𝓵', 'm': '𝓶', 'n': '𝓷', 'o': '𝓸', 'p': '𝓹',
+                'q': '𝓺', 'r': '𝓻', 's': '𝓼', 't': '𝓽', 'u': '𝓾', 'v': '𝓿', 'w': '𝔀', 'x': '𝔁',
+                'y': '𝔂', 'z': '𝔃', 'A': '𝓐', 'B': '𝓑', 'C': '𝓒', 'D': '𝓓', 'E': '𝓔', 'F': '𝓕',
+                'G': '𝓖', 'H': '𝓗', 'I': '𝓘', 'J': '𝓙', 'K': '𝓚', 'L': '𝓛', 'M': '𝓜', 'N': '𝓝',
+                'O': '𝓞', 'P': '𝓟', 'Q': '𝓠', 'R': '𝓡', 'S': '𝓢', 'T': '𝓣', 'U': '𝓤', 'V': '𝓥',
+                'W': '𝓦', 'X': '𝓧', 'Y': '𝓨', 'Z': '𝓩'
+            },
+            doubleStruck: {
+                'a': '𝕒', 'b': '𝕓', 'c': '𝕔', 'd': '𝕕', 'e': '𝕖', 'f': '𝕗', 'g': '𝕘', 'h': '𝕙',
+                'i': '𝕚', 'j': '𝕛', 'k': '𝕜', 'l': '𝕝', 'm': '𝕞', 'n': '𝕟', 'o': '𝕠', 'p': '𝕡',
+                'q': '𝕢', 'r': '𝕣', 's': '𝕤', 't': '𝕥', 'u': '𝕦', 'v': '𝕧', 'w': '𝕨', 'x': '𝕩',
+                'y': '𝕪', 'z': '𝕫', 'A': '𝔸', 'B': '𝔹', 'C': 'ℂ', 'D': '𝔻', 'E': '𝔼', 'F': '𝔽',
+                'G': '𝔾', 'H': 'ℍ', 'I': '𝕀', 'J': '𝕁', 'K': '𝕂', 'L': '𝕃', 'M': '𝕄', 'N': 'ℕ',
+                'O': '𝕆', 'P': 'ℙ', 'Q': 'ℚ', 'R': 'ℝ', 'S': '𝕊', 'T': '𝕋', 'U': '𝕌', 'V': '𝕍',
+                'W': '𝕎', 'X': '𝕏', 'Y': '𝕐', 'Z': 'ℤ', '0': '𝟘', '1': '𝟙', '2': '𝟚', '3': '𝟛',
+                '4': '𝟜', '5': '𝟝', '6': '𝟞', '7': '𝟟', '8': '𝟠', '9': '𝟡'
+            },
+            smallCaps: {
+                'a': 'ᴀ', 'b': 'ʙ', 'c': 'ᴄ', 'd': 'ᴅ', 'e': 'ᴇ', 'f': 'ꜰ', 'g': 'ɢ', 'h': 'ʜ',
+                'i': 'ɪ', 'j': 'ᴊ', 'k': 'ᴋ', 'l': 'ʟ', 'm': 'ᴍ', 'n': 'ɴ', 'o': 'ᴏ', 'p': 'ᴘ',
+                'q': 'ǫ', 'r': 'ʀ', 's': 'ꜱ', 't': 'ᴛ', 'u': 'ᴜ', 'v': 'ᴠ', 'w': 'ᴡ', 'x': 'x',
+                'y': 'ʏ', 'z': 'ᴢ'
+            },
+            upsideDown: {
+                'a': 'ɐ', 'b': 'q', 'c': 'ɔ', 'd': 'p', 'e': 'ǝ', 'f': 'ɟ', 'g': 'ɓ', 'h': 'ɥ',
+                'i': 'ᴉ', 'j': 'ɾ', 'k': 'ʞ', 'l': 'l', 'm': 'ɯ', 'n': 'u', 'o': 'o', 'p': 'd',
+                'q': 'b', 'r': 'ɹ', 's': 's', 't': 'ʇ', 'u': 'n', 'v': 'ʌ', 'w': 'ʍ', 'x': 'x',
+                'y': 'ʎ', 'z': 'z', 'A': '∀', 'B': '𐐒', 'C': 'Ɔ', 'D': '◖', 'E': 'Ǝ', 'F': 'Ⅎ',
+                'G': 'פ', 'H': 'H', 'I': 'I', 'J': 'ſ', 'K': 'ʞ', 'L': '˥', 'M': 'W', 'N': 'N',
+                'O': 'O', 'P': 'Ԁ', 'Q': 'Q', 'R': 'ᴚ', 'S': 'S', 'T': '⊥', 'U': '∩', 'V': 'Λ',
+                'W': 'M', 'X': 'X', 'Y': '⅄', 'Z': 'Z', '0': '0', '1': 'Ɩ', '2': 'ᔭ', '3': 'Ɛ',
+                '4': 'ㄣ', '5': 'ϛ', '6': '9', '7': 'ㄥ', '8': '8', '9': '6', '!': '¡', '?': '¿'
+            },
+            circled: {
+                'a': 'ⓐ', 'b': 'ⓑ', 'c': 'ⓒ', 'd': 'ⓓ', 'e': 'ⓔ', 'f': 'ⓕ', 'g': 'ⓖ', 'h': 'ⓗ',
+                'i': 'ⓘ', 'j': 'ⓙ', 'k': 'ⓚ', 'l': 'ⓛ', 'm': 'ⓜ', 'n': 'ⓝ', 'o': 'ⓞ', 'p': 'ⓟ',
+                'q': 'ⓠ', 'r': 'ⓡ', 's': 'ⓢ', 't': 'ⓣ', 'u': 'ⓤ', 'v': 'ⓥ', 'w': 'ⓦ', 'x': 'ⓧ',
+                'y': 'ⓨ', 'z': 'ⓩ', 'A': 'Ⓐ', 'B': 'Ⓑ', 'C': 'Ⓒ', 'D': 'Ⓓ', 'E': 'Ⓔ', 'F': 'Ⓕ',
+                'G': 'Ⓖ', 'H': 'Ⓗ', 'I': 'Ⓘ', 'J': 'Ⓙ', 'K': 'Ⓚ', 'L': 'Ⓛ', 'M': 'Ⓜ', 'N': 'Ⓝ',
+                'O': 'Ⓞ', 'P': 'Ⓟ', 'Q': 'Ⓠ', 'R': 'Ⓡ', 'S': 'Ⓢ', 'T': 'Ⓣ', 'U': 'Ⓤ', 'V': 'Ⓥ',
+                'W': 'Ⓦ', 'X': 'Ⓧ', 'Y': 'Ⓨ', 'Z': 'Ⓩ', '0': '⓪', '1': '①', '2': '②', '3': '③',
+                '4': '④', '5': '⑤', '6': '⑥', '7': '⑦', '8': '⑧', '9': '⑨'
+            },
+            squares: {
+                'a': '🄰', 'b': '🄱', 'c': '🄲', 'd': '🄳', 'e': '🄴', 'f': '🄵', 'g': '🄶', 'h': '🄷',
+                'i': '🄸', 'j': '🄹', 'k': '🄺', 'l': '🄻', 'm': '🄼', 'n': '🄽', 'o': '🄾', 'p': '🄿',
+                'q': '🅀', 'r': '🅁', 's': '🅂', 't': '🅃', 'u': '🅄', 'v': '🅅', 'w': '🅆', 'x': '🅇',
+                'y': '🅈', 'z': '🅉', 'A': '🄰', 'B': '🄱', 'C': '🄲', 'D': '🄳', 'E': '🄴', 'F': '🄵',
+                'G': '🄶', 'H': '🄷', 'I': '🄸', 'J': '🄹', 'K': '🄺', 'L': '🄻', 'M': '🄼', 'N': '🄽',
+                'O': '🄾', 'P': '🄿', 'Q': '🅀', 'R': '🅁', 'S': '🅂', 'T': '🅃', 'U': '🅄', 'V': '🅅',
+                'W': '🅆', 'X': '🅇', 'Y': '🅈', 'Z': '🅉', '0': '⓿', '1': '❶', '2': '❷', '3': '❸',
+                '4': '❹', '5': '❺', '6': '❻', '7': '❼', '8': '❽', '9': '❾'
+            },
+            bubble: {
+                'a': '⒜', 'b': '⒝', 'c': '⒞', 'd': '⒟', 'e': '⒠', 'f': '⒡', 'g': '⒢', 'h': '⒣',
+                'i': '⒤', 'j': '⒥', 'k': '⒦', 'l': '⒧', 'm': '⒨', 'n': '⒩', 'o': '⒪', 'p': '⒫',
+                'q': '⒬', 'r': '⒭', 's': '⒮', 't': '⒯', 'u': '⒰', 'v': '⒱', 'w': '⒲', 'x': '⒳',
+                'y': '⒴', 'z': '⒵', 'A': 'Ⓐ', 'B': 'Ⓑ', 'C': 'Ⓒ', 'D': 'Ⓓ', 'E': 'Ⓔ', 'F': 'Ⓕ',
+                'G': 'Ⓖ', 'H': 'Ⓗ', 'I': 'Ⓘ', 'J': 'Ⓙ', 'K': 'Ⓚ', 'L': 'Ⓛ', 'M': 'Ⓜ', 'N': 'Ⓝ',
+                'O': 'Ⓞ', 'P': 'Ⓟ', 'Q': 'Ⓠ', 'R': 'Ⓡ', 'S': 'Ⓢ', 'T': 'Ⓣ', 'U': 'Ⓤ', 'V': 'Ⓥ',
+                'W': 'Ⓦ', 'X': 'Ⓧ', 'Y': 'Ⓨ', 'Z': 'Ⓩ', '0': '⓪', '1': '①', '2': '②', '3': '③',
+                '4': '④', '5': '⑤', '6': '⑥', '7': '⑦', '8': '⑧', '9': '⑨'
+            },
+            asian: {
+                'a': '卂', 'b': '乃', 'c': '匚', 'd': '刀', 'e': '乇', 'f': '下', 'g': '厶', 'h': '卄',
+                'i': '工', 'j': '丁', 'k': '长', 'l': 'ㄥ', 'm': '口', 'n': '几', 'o': '口', 'p': '尸',
+                'q': '㔿', 'r': '尺', 's': '丂', 't': '丅', 'u': '凵', 'v': 'リ', 'w': '山', 'x': '乂',
+                'y': '丫', 'z': '乙', 'A': '卂', 'B': '乃', 'C': '匚', 'D': '刀', 'E': '乇', 'F': '下',
+                'G': '厶', 'H': '卄', 'I': '工', 'J': '丁', 'K': '长', 'L': 'ㄥ', 'M': '口', 'N': '几',
+                'O': '口', 'P': '尸', 'Q': '㔿', 'R': '尺', 'S': '丂', 'T': '丅', 'U': '凵', 'V': 'リ',
+                'W': '山', 'X': '乂', 'Y': '丫', 'Z': '乙', '0': '𝟘', '1': '𝟙', '2': '𝟚', '3': '𝟛',
+                '4': '𝟜', '5': '𝟝', '6': '𝟞', '7': '𝟟', '8': '𝟠', '9': '𝟡'
+            },
+            medieval: {
+                'a': '𝖆', 'b': '𝖇', 'c': '𝖈', 'd': '𝖉', 'e': '𝖊', 'f': '𝖋', 'g': '𝖌', 'h': '𝖍',
+                'i': '𝖎', 'j': '𝖏', 'k': '𝖐', 'l': '𝖑', 'm': '𝖒', 'n': '𝖓', 'o': '𝖔', 'p': '𝖕',
+                'q': '𝖖', 'r': '𝖗', 's': '𝖘', 't': '𝖙', 'u': '𝖚', 'v': '𝖛', 'w': '𝖜', 'x': '𝖝',
+                'y': '𝖞', 'z': '𝖟', 'A': '𝕬', 'B': '𝕭', 'C': '𝕮', 'D': '𝕯', 'E': '𝕰', 'F': '𝕱',
+                'G': '𝕲', 'H': '𝕳', 'I': '𝕴', 'J': '𝕵', 'K': '𝕶', 'L': '𝕷', 'M': '𝕸', 'N': '𝕹',
+                'O': '𝕺', 'P': '𝕻', 'Q': '𝕼', 'R': '𝕽', 'S': '𝕾', 'T': '𝕿', 'U': '𝖀', 'V': '𝖁',
+                'W': '𝖂', 'X': '𝖃', 'Y': '𝖄', 'Z': '𝖅'
+            },
+            superscript: {
+                'a': 'ᵃ', 'b': 'ᵇ', 'c': 'ᶜ', 'd': 'ᵈ', 'e': 'ᵉ', 'f': 'ᶠ', 'g': 'ᵍ', 'h': 'ʰ',
+                'i': 'ⁱ', 'j': 'ʲ', 'k': 'ᵏ', 'l': 'ˡ', 'm': 'ᵐ', 'n': 'ⁿ', 'o': 'ᵒ', 'p': 'ᵖ',
+                'q': 'ᵠ', 'r': 'ʳ', 's': 'ˢ', 't': 'ᵗ', 'u': 'ᵘ', 'v': 'ᵛ', 'w': 'ʷ', 'x': 'ˣ',
+                'y': 'ʸ', 'z': 'ᶻ', 'A': 'ᴬ', 'B': 'ᴮ', 'C': 'ᶜ', 'D': 'ᴰ', 'E': 'ᴱ', 'F': 'ᶠ',
+                'G': 'ᴳ', 'H': 'ᴴ', 'I': 'ᴵ', 'J': 'ᴶ', 'K': 'ᴷ', 'L': 'ᴸ', 'M': 'ᴹ', 'N': 'ᴺ',
+                'O': 'ᴼ', 'P': 'ᴾ', 'Q': 'ᴼ', 'R': 'ᴿ', 'S': 'ˢ', 'T': 'ᵀ', 'U': 'ᵁ', 'V': 'ⱽ',
+                'W': 'ᵂ', 'X': 'ˣ', 'Y': 'ʸ', 'Z': 'ᶻ', '0': '⁰', '1': '¹', '2': '²', '3': '³',
+                '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'
+            },
+            subscript: {
+                'a': 'ₐ', 'b': '₈', 'c': '꜀', 'd': 'ₑ', 'e': 'ₑ', 'f': 'բ', 'g': '₉', 'h': 'ₕ',
+                'i': 'ᵢ', 'j': 'ⱼ', 'k': 'ₖ', 'l': 'ₗ', 'm': 'ₘ', 'n': 'ₙ', 'o': 'ₒ', 'p': 'ₚ',
+                'q': 'ᵩ', 'r': 'ᵣ', 's': 'ₛ', 't': 'ₜ', 'u': 'ᵤ', 'v': 'ᵥ', 'w': '𝓌', 'x': 'ₓ',
+                'y': 'ᵧ', 'z': '𝓏', 'A': 'ₐ', 'B': '₈', 'C': '꜀', 'D': 'ₑ', 'E': 'ₑ', 'F': 'բ',
+                'G': '₉', 'H': 'ₕ', 'I': 'ᵢ', 'J': 'ⱼ', 'K': 'ₖ', 'L': 'ₗ', 'M': 'ₘ', 'N': 'ₙ',
+                'O': 'ₒ', 'P': 'ₚ', 'Q': 'ᵩ', 'R': 'ᵣ', 'S': 'ₛ', 'T': 'ₜ', 'U': 'ᵤ', 'V': 'ᵥ',
+                'W': '𝓌', 'X': 'ₓ', 'Y': 'ᵧ', 'Z': '𝓏', '0': '₀', '1': '₁', '2': '₂', '3': '₃',
+                '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉'
+            },
+            invertedSquares: {
+                'a': '🅰', 'b': '🅱', 'c': '🅲', 'd': '🅳', 'e': '🅴', 'f': '🅵', 'g': '🅶', 'h': '🅷',
+                'i': '🅸', 'j': '🅹', 'k': '🅺', 'l': '🅻', 'm': '🅼', 'n': '🅽', 'o': '🅾', 'p': '🅿',
+                'q': '🆀', 'r': '🆁', 's': '🆂', 't': '🆃', 'u': '🆄', 'v': '🆅', 'w': '🆆', 'x': '🆇',
+                'y': '🆈', 'z': '🆉', 'A': '🅰', 'B': '🅱', 'C': '🅲', 'D': '🅳', 'E': '🅴', 'F': '🅵',
+                'G': '🅶', 'H': '🅷', 'I': '🅸', 'J': '🅹', 'K': '🅺', 'L': '🅻', 'M': '🅼', 'N': '🅽',
+                'O': '🅾', 'P': '🅿', 'Q': '🆀', 'R': '🆁', 'S': '🆂', 'T': '🆃', 'U': '🆄', 'V': '🆅',
+                'W': '🆆', 'X': '🆇', 'Y': '🆈', 'Z': '🆉', '0': '0️⃣', '1': '1️⃣', '2': '2️⃣', '3': '3️⃣',
+                '4': '4️⃣', '5': '5️⃣', '6': '6️⃣', '7': '7️⃣', '8': '8️⃣', '9': '9️⃣'
+            },
+            parenthesized: {
+                'a': '⒜', 'b': '⒝', 'c': '⒞', 'd': '⒟', 'e': '⒠', 'f': '⒡', 'g': '⒢', 'h': '⒣',
+                'i': '⒤', 'j': '⒥', 'k': '⒦', 'l': '⒧', 'm': '⒨', 'n': '⒩', 'o': '⒪', 'p': '⒫',
+                'q': '⒬', 'r': '⒭', 's': '⒮', 't': '⒯', 'u': '⒰', 'v': '⒱', 'w': '⒲', 'x': '⒳',
+                'y': '⒴', 'z': '⒵', 'A': 'Ⓐ', 'B': 'Ⓑ', 'C': 'Ⓒ', 'D': 'Ⓓ', 'E': 'Ⓔ', 'F': 'Ⓕ',
+                'G': 'Ⓖ', 'H': 'Ⓗ', 'I': 'Ⓘ', 'J': 'Ⓙ', 'K': 'Ⓚ', 'L': 'Ⓛ', 'M': 'Ⓜ', 'N': 'Ⓝ',
+                'O': 'Ⓞ', 'P': 'Ⓟ', 'Q': 'Ⓠ', 'R': 'Ⓡ', 'S': 'Ⓢ', 'T': 'Ⓣ', 'U': 'Ⓤ', 'V': 'Ⓥ',
+                'W': 'Ⓦ', 'X': 'Ⓧ', 'Y': 'Ⓨ', 'Z': 'Ⓩ', '0': '⑩', '1': '⑪', '2': '⑫', '3': '⑬',
+                '4': '⑭', '5': '⑮', '6': '⑯', '7': '⑰', '8': '⑱', '9': '⑲'
+            },
+            fullwidth: {
+                'a': 'ａ', 'b': 'ｂ', 'c': 'ｃ', 'd': 'ｄ', 'e': 'ｅ', 'f': 'ｆ', 'g': 'ｇ', 'h': 'ｈ',
+                'i': 'ｉ', 'j': 'ｊ', 'k': 'ｋ', 'l': 'ｌ', 'm': 'ｍ', 'n': 'ｎ', 'o': 'ｏ', 'p': 'ｐ',
+                'q': 'ｑ', 'r': 'ｒ', 's': 'ｓ', 't': 'ｔ', 'u': 'ｕ', 'v': 'ｖ', 'w': 'ｗ', 'x': 'ｘ',
+                'y': 'ｙ', 'z': 'ｚ', 'A': 'Ａ', 'B': 'Ｂ', 'C': 'Ｃ', 'D': 'Ｄ', 'E': 'Ｅ', 'F': 'Ｆ',
+                'G': 'Ｇ', 'H': 'Ｈ', 'I': 'Ｉ', 'J': 'Ｊ', 'K': 'Ｋ', 'L': 'Ｌ', 'M': 'Ｍ', 'N': 'Ｎ',
+                'O': 'Ｏ', 'P': 'Ｐ', 'Q': 'Ｑ', 'R': 'Ｒ', 'S': 'Ｓ', 'T': 'Ｔ', 'U': 'Ｕ', 'V': 'Ｖ',
+                'W': 'Ｗ', 'X': 'Ｘ', 'Y': 'Ｙ', 'Z': 'Ｚ', '0': '０', '1': '１', '2': '２', '3': '３',
+                '4': '４', '5': '５', '6': '６', '7': '７', '8': '８', '9': '９', '!': '！', '?': '？',
+                ' ': '　'
+            },
+            currency: {
+                'a': '₳', 'b': '฿', 'c': '¢', 'd': '₫', 'e': '€', 'f': 'ƒ', 'g': '₲', 'h': '₴',
+                'i': '៛', 'j': '¥', 'k': '₭', 'l': '£', 'm': '₥', 'n': '₦', 'o': '৳', 'p': '₱',
+                'q': '₲', 'r': '₹', 's': '$', 't': '₮', 'u': '₳', 'v': '₣', 'w': '₩', 'x': '¤',
+                'y': '¥', 'z': '₪', 'A': '₳', 'B': '฿', 'C': '¢', 'D': '₫', 'E': '€', 'F': 'ƒ',
+                'G': '₲', 'H': '₴', 'I': '៛', 'J': '¥', 'K': '₭', 'L': '£', 'M': '₥', 'N': '₦',
+                'O': '৳', 'P': '₱', 'Q': '₲', 'R': '₹', 'S': '$', 'T': '₮', 'U': '₳', 'V': '₣',
+                'W': '₩', 'X': '¤', 'Y': '¥', 'Z': '₪', '0': '০', '1': '১', '2': '২', '3': '৩',
+                '4': '৪', '5': '৫', '6': '৬', '7': '৭', '8': '৮', '9': '৯'
+            },
+            emojiMix: {
+                'a': '🅰️', 'b': '🅱️', 'c': '©️', 'd': '↩️', 'e': '📧', 'f': '🎏', 'g': '🅿️', 'h': '♓️',
+                'i': 'ℹ️', 'j': '🗾', 'k': '🎋', 'l': '🇱', 'm': 'Ⓜ️', 'n': '🇳', 'o': '⭕', 'p': '🅿️',
+                'q': '❓', 'r': '®️', 's': '💲', 't': '🌴', 'u': '🇺', 'v': '🇻', 'w': '〰️', 'x': '❌',
+                'y': '🇾', 'z': '💤', 'A': '🅰️', 'B': '🅱️', 'C': '©️', 'D': '↩️', 'E': '📧', 'F': '🎏',
+                'G': '🅿️', 'H': '♓️', 'I': 'ℹ️', 'J': '🗾', 'K': '🎋', 'L': '🇱', 'M': 'Ⓜ️', 'N': '🇳',
+                'O': '⭕', 'P': '🅿️', 'Q': '❓', 'R': '®️', 'S': '💲', 'T': '🌴', 'U': '🇺', 'V': '🇻',
+                'W': '〰️', 'X': '❌', 'Y': '🇾', 'Z': '💤', '0': '0️⃣', '1': '1️⃣', '2': '2️⃣', '3': '3️⃣',
+                '4': '4️⃣', '5': '5️⃣', '6': '6️⃣', '7': '7️⃣', '8': '8️⃣', '9': '9️⃣'
+            },
+            special: {
+                'a': '¥', 'b': 'Ƥ', 'c': '€', 'd': '§', 'e': 'Ø', 'f': 'μ', 'g': '€', 'h': 'Ŧ',
+                'i': 'Ħ', 'j': 'Ɨ', 'k': 'Ň', 'l': 'Ǥ', 'm': 'Ħ', 'n': '€', 'o': 'Ř', 'p': '€',
+                'q': 'Ŧ', 'r': 'Ø', 's': 'Ŧ', 't': 'Ř', 'u': '¥', 'v': 'Δ', 'w': '₣', 'x': 'Ø',
+                'y': 'Ň', 'z': 'Ŧ', 'A': 'Ŧ', 'B': '¥', 'C': 'Ƥ', 'D': '€', 'E': 'Ş', 'F': 'Ø',
+                'G': 'μ', 'H': '€', 'I': 'Ŧ', 'J': 'Ħ', 'K': 'Ɨ', 'L': 'Ň', 'M': 'Ǥ', 'N': 'Ħ',
+                'O': '€', 'P': 'Ř', 'Q': '€', 'R': 'Ŧ', 'S': 'Ø', 'T': 'Ŧ', 'U': 'Ř', 'V': '¥',
+                'W': 'Δ', 'X': '₣', 'Y': 'Ø', 'Z': 'Ň', '0': 'Ʀ', '1': '¥', '2': '€', '3': '₣',
+                '4': '§', '5': 'μ', '6': '€', '7': 'Ŧ', '8': 'Ħ', '9': 'Ɨ'
+            },
+            serifBold: {
+                'a': '𝐚', 'b': '𝐛', 'c': '𝐜', 'd': '𝐝', 'e': '𝐞', 'f': '𝐟', 'g': '𝐠', 'h': '𝐡',
+                'i': '𝐢', 'j': '𝐣', 'k': '𝐤', 'l': '𝐥', 'm': '𝐦', 'n': '𝐧', 'o': '𝐨', 'p': '𝐩',
+                'q': '𝐪', 'r': '𝐫', 's': '𝐬', 't': '𝐭', 'u': '𝐮', 'v': '𝐯', 'w': '𝐰', 'x': '𝐱',
+                'y': '𝐲', 'z': '𝐳', 'A': '𝐀', 'B': '𝐁', 'C': '𝐂', 'D': '𝐃', 'E': '𝐄', 'F': '𝐅',
+                'G': '𝐆', 'H': '𝐇', 'I': '𝐈', 'J': '𝐉', 'K': '𝐊', 'L': '𝐋', 'M': '𝐌', 'N': '𝐍',
+                'O': '𝐎', 'P': '𝐏', 'Q': '𝐐', 'R': '𝐑', 'S': '𝐒', 'T': '𝐓', 'U': '𝐔', 'V': '𝐕',
+                'W': '𝐖', 'X': '𝐗', 'Y': '𝐘', 'Z': '𝐙', '0': '𝟎', '1': '𝟏', '2': '𝟐', '3': '𝟑',
+                '4': '𝟒', '5': '𝟓', '6': '𝟔', '7': '𝟕', '8': '𝟖', '9': '𝟗'
+            },
+            serifItalic: {
+                'a': '𝑎', 'b': '𝑏', 'c': '𝑐', 'd': '𝑑', 'e': '𝑒', 'f': '𝑓', 'g': '𝑔', 'h': 'ℎ',
+                'i': '𝑖', 'j': '𝑗', 'k': '𝑘', 'l': '𝑙', 'm': '𝑚', 'n': '𝑛', 'o': '𝑜', 'p': '𝑝',
+                'q': '𝑞', 'r': '𝑟', 's': '𝑠', 't': '𝑡', 'u': '𝑢', 'v': '𝑣', 'w': '𝑤', 'x': '𝑥',
+                'y': '𝑦', 'z': '𝑧', 'A': '𝐴', 'B': '𝐵', 'C': '𝐶', 'D': '𝐷', 'E': '𝐸', 'F': '𝐹',
+                'G': '𝐺', 'H': '𝐻', 'I': '𝐼', 'J': '𝐽', 'K': '𝐾', 'L': '𝐿', 'M': '𝑀', 'N': '𝑁',
+                'O': '𝑂', 'P': '𝑃', 'Q': '𝑄', 'R': '𝑅', 'S': '𝑆', 'T': '𝑇', 'U': '𝑈', 'V': '𝑉',
+                'W': '𝑊', 'X': '𝑋', 'Y': '𝑌', 'Z': '𝑍'
+            },
+            serifBoldItalic: {
+                'a': '𝒂', 'b': '𝒃', 'c': '𝒄', 'd': '𝒅', 'e': '𝒆', 'f': '𝒇', 'g': '𝒈', 'h': '𝒉',
+                'i': '𝒊', 'j': '𝒋', 'k': '𝒌', 'l': '𝒍', 'm': '𝒎', 'n': '𝒏', 'o': '𝒐', 'p': '𝒑',
+                'q': '𝒒', 'r': '𝒓', 's': '𝒔', 't': '𝒕', 'u': '𝒖', 'v': '𝒗', 'w': '𝒘', 'x': '𝒙',
+                'y': '𝒚', 'z': '𝒛', 'A': '𝑨', 'B': '𝑩', 'C': '𝑪', 'D': '𝑫', 'E': '𝑬', 'F': '𝑭',
+                'G': '𝑮', 'H': '𝑯', 'I': '𝑰', 'J': '𝑱', 'K': '𝑲', 'L': '𝑳', 'M': '𝑴', 'N': '𝑵',
+                'O': '𝑶', 'P': '𝑷', 'Q': '𝑸', 'R': '𝑹', 'S': '𝑺', 'T': '𝑻', 'U': '𝑼', 'V': '𝑽',
+                'W': '𝑾', 'X': '𝑿', 'Y': '𝒀', 'Z': '𝒁'
+            },
+            negativeCircled: {
+                'a': '🅐', 'b': '🅑', 'c': '🅒', 'd': '🅓', 'e': '🅔', 'f': '🅕', 'g': '🅖', 'h': '🅗',
+                'i': '🅘', 'j': '🅙', 'k': '🅚', 'l': '🅛', 'm': '🅜', 'n': '🅝', 'o': '🅞', 'p': '🅟',
+                'q': '🅠', 'r': '🅡', 's': '🅢', 't': '🅣', 'u': '🅤', 'v': '🅥', 'w': '🅦', 'x': '🅧',
+                'y': '🅨', 'z': '🅩', 'A': '🅐', 'B': '🅑', 'C': '🅒', 'D': '🅓', 'E': '🅔', 'F': '🅕',
+                'G': '🅖', 'H': '🅗', 'I': '🅘', 'J': '🅙', 'K': '🅚', 'L': '🅛', 'M': '🅜', 'N': '🅝',
+                'O': '🅞', 'P': '🅟', 'Q': '🅠', 'R': '🅡', 'S': '🅢', 'T': '🅣', 'U': '🅤', 'V': '🅥',
+                'W': '🅦', 'X': '🅧', 'Y': '🅨', 'Z': '🅩', '0': '⓿', '1': '❶', '2': '❷', '3': '❸',
+                '4': '❹', '5': '❺', '6': '❻', '7': '❼', '8': '❽', '9': '❾'
+            },
+            flagLetters: {
+                'a': '🇦', 'b': '🇧', 'c': '🇨', 'd': '🇩', 'e': '🇪', 'f': '🇫', 'g': '🇬', 'h': '🇭',
+                'i': '🇮', 'j': '🇯', 'k': '🇰', 'l': '🇱', 'm': '🇲', 'n': '🇳', 'o': '🇴', 'p': '🇵',
+                'q': '🇶', 'r': '🇷', 's': '🇸', 't': '🇹', 'u': '🇺', 'v': '🇻', 'w': '🇼', 'x': '🇽',
+                'y': '🇾', 'z': '🇿', 'A': '🇦', 'B': '🇧', 'C': '🇨', 'D': '🇩', 'E': '🇪', 'F': '🇫',
+                'G': '🇬', 'H': '🇭', 'I': '🇮', 'J': '🇯', 'K': '🇰', 'L': '🇱', 'M': '🇲', 'N': '🇳',
+                'O': '🇴', 'P': '🇵', 'Q': '🇶', 'R': '🇷', 'S': '🇸', 'T': '🇹', 'U': '🇺', 'V': '🇻',
+                'W': '🇼', 'X': '🇽', 'Y': '🇾', 'Z': '🇿'
+            },
+            greek: {
+                'a': 'α', 'b': 'β', 'c': 'χ', 'd': 'δ', 'e': 'ε', 'f': 'φ', 'g': 'γ', 'h': 'η',
+                'i': 'ι', 'j': 'ϳ', 'k': 'κ', 'l': 'λ', 'm': 'μ', 'n': 'ν', 'o': 'ο', 'p': 'π',
+                'q': 'θ', 'r': 'ρ', 's': 'σ', 't': 'τ', 'u': 'υ', 'v': 'ϝ', 'w': 'ω', 'x': 'ξ',
+                'y': 'ψ', 'z': 'ζ', 'A': 'Α', 'B': 'Β', 'C': 'Χ', 'D': 'Δ', 'E': 'Ε', 'F': 'Φ',
+                'G': 'Γ', 'H': 'Η', 'I': 'Ι', 'J': 'Ϳ', 'K': 'Κ', 'L': 'Λ', 'M': 'Μ', 'N': 'Ν',
+                'O': 'Ο', 'P': 'Π', 'Q': 'Θ', 'R': 'Ρ', 'S': 'Σ', 'T': 'Τ', 'U': 'Υ', 'V': 'Ϝ',
+                'W': 'Ω', 'X': 'Ξ', 'Y': 'Ψ', 'Z': 'Ζ'
+            },
+            fraktur: {
+                'a': '𝔞', 'b': '𝔟', 'c': '𝔠', 'd': '𝔡', 'e': '𝔢', 'f': '𝔣', 'g': '𝔤', 'h': '𝔥',
+                'i': '𝔦', 'j': '𝔧', 'k': '𝔨', 'l': '𝔩', 'm': '𝔪', 'n': '𝔫', 'o': '𝔬', 'p': '𝔭',
+                'q': '𝔮', 'r': '𝔯', 's': '𝔰', 't': '𝔱', 'u': '𝔲', 'v': '𝔳', 'w': '𝔴', 'x': '𝔵',
+                'y': '𝔶', 'z': '𝔷', 'A': '𝔄', 'B': '𝔅', 'C': 'ℭ', 'D': '𝔇', 'E': '𝔈', 'F': '𝔉',
+                'G': '𝔊', 'H': 'ℌ', 'I': 'ℑ', 'J': '𝔍', 'K': '𝔎', 'L': '𝔏', 'M': '𝔐', 'N': '𝔑',
+                'O': '𝔒', 'P': '𝔓', 'Q': '𝔔', 'R': 'ℜ', 'S': '𝔖', 'T': '𝔗', 'U': '𝔘', 'V': '𝔙',
+                'W': '𝔚', 'X': '𝔛', 'Y': '𝔜', 'Z': 'ℨ'
+            }
+        };
+
+        /* =====================================================
+           Helper converters
+        ===================================================== */
+        const conv = (text, map) => text.split('').map(c => map[c] || c).join('');
+        const lineEffect = mark => text => text.split('').map(c => c + mark).join('');
+        const surround = (pre, post, map) => text => pre + conv(text, map) + post;
+        const st = (name, cat, fn) => ({ name, cat, fn });
+
+        function zalgo(text) {
+            const above = ['̍', '̎', '̄', '̅', '̿', '̀', '́', '͂', '̓', '̈́', '͆', '͇', '͈', '͉', '͊', '͋', '͌', '͍', '͎', '͏', '̾', '͐', '͑', '͒', '͓', '͔', '͕', '͖', '͗', '͘', '͙', '͚', '̈'];
+            const middle = ['̕', '̶', '̷', '̸', '̀', '́', '͂', '̓', '̈́', '͆', '͇', '͈', '͉', '͊', '͋', '͌', '͍', '͎', '͏'];
+            const below = ['̗', '̘', '̙', '̜', '̝', '̞', '̟', '̠', '̤', '̥', '̦', '̩', '̪', '̫', '̬', '̭', '̮', '̯', '̰', '̱', '̲', '̳', '̹', '̺', '̻', '̼', 'ͅ', '͇', '͈', '͉', '͍', '͎', '͓', '͔', '͕', '͖', '͙', '͚', '̣'];
+            const rnd = arr => arr[Math.floor(Math.random() * arr.length)];
+            return text.split('').map(ch => {
+                if (ch === ' ') return ch;
+                let out = ch;
+                for (let i = 0; i < Math.floor(Math.random() * 3) + 1; i++) out += rnd(above);
+                for (let i = 0; i < Math.floor(Math.random() * 2) + 1; i++) out += rnd(middle);
+                for (let i = 0; i < Math.floor(Math.random() * 3) + 1; i++) out += rnd(below);
+                return out;
+            }).join('');
+        }
+
+        /* =====================================================
+           Categories & style list
+        ===================================================== */
+        const CATS = [
+            { id: 'fonts',     name: 'Font Styles',        icon: '🔤' },
+            { id: 'symbols',   name: 'Symbols & Shapes',   icon: '🔣' },
+            { id: 'effects',   name: 'Line & Glitch FX',   icon: '〰️' },
+            { id: 'decorated', name: 'Decorated & Framed', icon: '🎀' },
+            { id: 'emoji',     name: 'Emoji Styles',       icon: '😎' }
+        ];
+        const CAT_ICON = {};
+        CATS.forEach(c => { CAT_ICON[c.id] = c.icon; });
+
+        const STYLES = [
+            /* --- Font Styles --- */
+            st('Bold',           'fonts', t => conv(t, MAP.bold)),
+            st('Italic',         'fonts', t => conv(t, MAP.italic)),
+            st('Bold Italic',    'fonts', t => conv(t, MAP.boldItalic)),
+            st('Monospace',      'fonts', t => conv(t, MAP.monospace)),
+            st('Script',         'fonts', t => conv(t, MAP.script)),
+            st('Bold Script',    'fonts', t => conv(t, MAP.boldScript)),
+            st('Double Struck',  'fonts', t => conv(t, MAP.doubleStruck)),
+            st('Medieval',       'fonts', t => conv(t, MAP.medieval)),
+            st('Cursive',        'fonts', t => conv(t, MAP.boldScript)),
+            st('Small Caps',     'fonts', t => conv(t, MAP.smallCaps)),
+            st('Superscript',    'fonts', t => conv(t, MAP.superscript)),
+            st('Subscript',      'fonts', t => conv(t, MAP.subscript)),
+            st('Fullwidth',      'fonts', t => conv(t, MAP.fullwidth)),
+            st('Serif Bold',       'fonts', t => conv(t, MAP.serifBold)),
+            st('Serif Italic',     'fonts', t => conv(t, MAP.serifItalic)),
+            st('Serif Bold Italic','fonts', t => conv(t, MAP.serifBoldItalic)),
+            st('Gothic',           'fonts', t => conv(t, MAP.fraktur)),
+
+            /* --- Symbols & Shapes --- */
+            st('Circled',          'symbols', t => conv(t, MAP.circled)),
+            st('Squares',          'symbols', t => conv(t, MAP.squares)),
+            st('Bubble',           'symbols', t => conv(t, MAP.bubble)),
+            st('Inverted Squares', 'symbols', t => conv(t, MAP.invertedSquares)),
+            st('Parenthesized',    'symbols', t => conv(t, MAP.parenthesized)),
+            st('Currency',         'symbols', t => conv(t, MAP.currency)),
+            st('Special Symbols',  'symbols', t => conv(t, MAP.special)),
+            st('Asian Style',      'symbols', t => conv(t, MAP.asian)),
+            st('Creepy',           'symbols', t => conv(t, MAP.asian)),
+            st('Negative Circled', 'symbols', t => conv(t, MAP.negativeCircled)),
+            st('Flag Letters',     'symbols', t => conv(t, MAP.flagLetters)),
+            st('Greek Style',      'symbols', t => conv(t, MAP.greek)),
+
+            /* --- Line & Glitch FX --- */
+            st('Upside Down',      'effects', t => conv(t, MAP.upsideDown).split('').reverse().join('')),
+            st('Wide Text',        'effects', t => t.split('').map(c => c === ' ' ? '\u3000' : c + '\uFE0E').join('')),
+            st('Underline',        'effects', lineEffect('\u0332')),
+            st('Strikethrough',    'effects', lineEffect('\u0336')),
+            st('Overline',         'effects', lineEffect('\u0305')),
+            st('Dotted',           'effects', lineEffect('\u0307')),
+            st('Double Underline', 'effects', lineEffect('\u0333')),
+            st('Wavy',             'effects', lineEffect('\u0334')),
+            st('Wavy Lines',       'effects', t => t.split('').map(c => c === ' ' ? c : '\u032F' + c + '\u032F').join('')),
+            st('Diacritic 1',      'effects', t => t.split('').map(c => c === ' ' ? c : c + '\u034E\u034E').join('')),
+            st('Diacritic 2',      'effects', t => t.split('').map(c => c === ' ' ? c : c + '\u033E\u033E').join('')),
+            st('Zalgo Glitch',     'effects', zalgo),
+            st('Slash Through',    'effects', lineEffect('\u0337')),
+            st('Spaced Out',       'effects', t => t.split('').join(' ')),
+            st('Aesthetic',        'effects', t => conv(t, MAP.fullwidth).split('').join(' ')),
+
+            /* --- Decorated & Framed --- */
+            st('Floral Decorated',  'decorated', surround('✴.·´¯`·.·★ 🎀 ', ' 🎀 ★·.·`¯´·.✴', MAP.boldScript)),
+            st('Block Gradient',    'decorated', surround('✩░▒▓▆▅▃▂▁', '▁▂▃▅▆▓▒░✩', MAP.bold)),
+            st('Music Notes',       'decorated', surround('¸¸♬·¯·♪·¯·♫¸¸ ', ' ¸¸♫·¯·♪¸♩·¯·♬¸¸', MAP.boldScript)),
+            st('Heart Emojis',      'decorated', surround('😍💞💘 ', ' 💔💏💖', MAP.boldScript)),
+            st('Circle Text',       'decorated', surround('∙∙·▫▫ᵒᴼᵒ▫ₒₒ▫ᵒᴼ ', ' ᴼᵒ▫ₒₒ▫ᵒᴼᵒ▫▫·∙∙', MAP.circled)),
+            st('Food Emojis',       'decorated', surround('🥕🍅🥬🥦 ', ' 🍆🥔🌽🥑', MAP.boldScript)),
+            st('Box Style',         'decorated', t => '❚█══' + t + '══█❚'),
+            st('Sparkle Decorated', 'decorated', surround('⋆｡°✩ ', ' ✩°｡⋆', MAP.boldScript)),
+            st('Star Decorated',    'decorated', surround('★彡 ', ' 彡★', MAP.bold)),
+            st('Japanese Brackets', 'decorated', surround('「 ', ' 」', MAP.boldScript)),
+            st('Crown Decorated',   'decorated', surround('👑 ', ' 👑', MAP.bold)),
+            st('Diamond Decorated', 'decorated', surround('◇◆◇ ', ' ◇◆◇', MAP.boldScript)),
+            st('Sakura Decorated',  'decorated', surround('🌸🌸🌸 ', ' 🌸🌸🌸', MAP.boldScript)),
+            st('Butterfly Decorated','decorated', surround('🦋 ', ' 🦋', MAP.boldScript)),
+            st('Rainbow Decorated', 'decorated', surround('🌈🌈 ', ' 🌈🌈', MAP.boldScript)),
+            st('Star Divider',      'decorated', surround('── ⋆⋅☆⋅⋆ ── ', ' ── ⋆⋅☆⋅⋆ ──', MAP.boldScript)),
+            st('Kaomoji Happy',     'decorated', surround('(◕‿◕)♡ ', ' ♡(◕‿◕)', MAP.boldScript)),
+            st('Royal Frame',       'decorated', surround('꧁༺ ', ' ༻꧂', MAP.bold)),
+            st('Glitter Frame',     'decorated', surround('✧･ﾟ: *✧･ﾟ:* ', ' *:･ﾟ✧*:･ﾟ✧', MAP.boldScript)),
+            st('Star Line Frame',   'decorated', surround('☆✼★━━━━ ', ' ━━━━★✼☆', MAP.bold)),
+            st('Heart Hands',       'decorated', t => '(っ◔◡◔)っ ' + conv(t, MAP.boldScript)),
+            st('Flower Circle',     'decorated', surround('✿°。 ', ' 。°✿', MAP.boldScript)),
+            st('Soft Frame',        'decorated', surround('｡･ﾟﾟ･ ', ' ･ﾟﾟ･｡', MAP.boldScript)),
+
+            /* --- Emoji Styles --- */
+            st('Emoji Mix',  'emoji', t => conv(t, MAP.emojiMix)),
+            st('Fire',       'emoji', t => t.split('').map(c => c + '🔥').join('')),
+            st('Ice',        'emoji', t => t.split('').map(c => c + '❄️').join('')),
+            st('Lightning',  'emoji', t => t.split('').map(c => c + '⚡').join('')),
+            st('Hearts',     'emoji', t => t.split('').map(c => c + '❤️').join('')),
+            st('Rainbow',    'emoji', t => t.split('').map(c => c + '🌈').join('')),
+            st('Music Emoji','emoji', t => t.split('').map(c => c + '🎵').join('')),
+            st('Flowers',    'emoji', t => t.split('').map(c => c + '🌸').join('')),
+            st('Skeleton',   'emoji', t => t.split('').map(c => c + '💀').join('')),
+            st('Droplets',   'emoji', t => t.split('').map(c => c + '💧').join('')),
+            st('Moonlight',  'emoji', t => t.split('').map(c => c + '🌙').join('')),
+            st('Party',      'emoji', t => t.split('').map(c => c + '🎉').join('')),
+            st('Star Struck','emoji', t => t.split('').map(c => c + '⭐').join(''))
+        ];
+
+        const counts = {};
+        CATS.forEach(c => { counts[c.id] = STYLES.filter(s => s.cat === c.id).length; });
+
+        /* =====================================================
+           DOM references & state
+        ===================================================== */
+        const textInput   = document.getElementById('textInput');
+        const charCount   = document.getElementById('charCount');
+        const clearBtn    = document.getElementById('clearBtn');
+        const chipsEl     = document.getElementById('chips');
+        const searchInput = document.getElementById('searchInput');
+        const area        = document.getElementById('stylesArea');
+        const area1b      = document.getElementById('stylesArea1b');
+        const area2       = document.getElementById('stylesArea2');
+        const area2b      = document.getElementById('stylesArea2b');
+        const midAds      = ['midAdA', 'midAdN', 'midAd', 'midAdC'].map(id => document.getElementById(id));
+        const toast       = document.getElementById('toast');
+        const themeBtn    = document.getElementById('themeBtn');
+        const totalEl     = document.getElementById('totalStyles');
+
+        const SAMPLE = 'Fancy Text';
+        let activeCat = 'all';
+        let query = '';
+        let toastTimer = null;
+
+        function el(tag, cls, text) {
+            const n = document.createElement(tag);
+            if (cls) n.className = cls;
+            if (text !== undefined) n.textContent = text;
+            return n;
+        }
+
+        const displayText = () => textInput.value.trim() ? textInput.value : SAMPLE;
+
+        /* =====================================================
+           Copy to clipboard (with fallback for file:// use)
+        ===================================================== */
+        function showToast() {
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 1600);
+        }
+
+        function copyFancy(text, btn) {
+            const done = () => {
+                showToast();
+                if (btn) {
+                    btn.textContent = '✓ Copied';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = 'Copy';
+                        btn.classList.remove('copied');
+                    }, 1600);
+                }
+            };
+            const fallback = () => {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none;';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); done(); } catch (e) { console.error('Copy failed', e); }
+                document.body.removeChild(ta);
+            };
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(done).catch(fallback);
+            } else {
+                fallback();
+            }
+        }
+
+        /* =====================================================
+           Card builder
+        ===================================================== */
+        function buildCard(style, i, animate) {
+            const card = el('div', 'style-card glass-card');
+            if (animate) card.style.setProperty('--i', Math.min(i, 24));
+
+            const head = el('div', 'card-head');
+            head.appendChild(el('span', 'style-chip', CAT_ICON[style.cat] + ' ' + style.name));
+
+            const btn = el('button', 'copy-btn', 'Copy');
+            btn.type = 'button';
+            head.appendChild(btn);
+
+            const body = el('div', 'fancy-text', style.fn(displayText()));
+            body.title = 'Click to copy';
+            body.addEventListener('click', () => copyFancy(body.textContent, btn));
+            btn.addEventListener('click', () => copyFancy(body.textContent, btn));
+
+            card.appendChild(head);
+            card.appendChild(body);
+            return card;
+        }
+
+        /* =====================================================
+           Middle ad visibility
+        ===================================================== */
+        function setMidAd(show) {
+            midAds.forEach(a => { if (a) a.style.display = show ? '' : 'none'; });
+        }
+
+        /* =====================================================
+           Render
+        ===================================================== */
+        function render(animate) {
+            const isPreview = !textInput.value.trim() && !query;
+            area.innerHTML = '';
+            area1b.innerHTML = '';
+            area2.innerHTML = '';
+            area2b.innerHTML = '';
+
+            if (isPreview) {
+                area.appendChild(el('div', 'preview-hint', '👁 Preview with sample text — type above to make it yours'));
+            }
+
+            let list = STYLES;
+            if (activeCat !== 'all') list = list.filter(s => s.cat === activeCat);
+            if (query) list = list.filter(s => s.name.toLowerCase().includes(query));
+
+            if (!list.length) {
+                area.appendChild(el('div', 'empty-msg', '😕 No styles match "' + query + '". Try another word.'));
+                setMidAd(false);
+                return;
+            }
+
+            if (activeCat === 'all' && !query) {
+                CATS.forEach((cat, ci) => {
+                    const sec = el('section', 'style-section');
+                    const head = el('div', 'section-head');
+                    head.appendChild(el('h2', null, cat.icon + ' ' + cat.name));
+                    head.appendChild(el('span', 'sec-count', String(counts[cat.id])));
+                    head.appendChild(el('div', 'section-line'));
+                    sec.appendChild(head);
+
+                    const grid = el('div', 'grid' + (animate ? ' anim' : ''));
+                    list.filter(s => s.cat === cat.id).forEach((s, i) => grid.appendChild(buildCard(s, i, animate)));
+                    sec.appendChild(grid);
+                    [area, area1b, area1b, area2, area2b][ci].appendChild(sec);
+                });
+                setMidAd(true);
+            } else {
+                const grid = el('div', 'grid' + (animate ? ' anim' : ''));
+                list.forEach((s, i) => grid.appendChild(buildCard(s, i, animate)));
+                area.appendChild(grid);
+                setMidAd(false);
+            }
+        }
+
+        /* =====================================================
+           Category chips
+        ===================================================== */
+        function buildChips() {
+            chipsEl.innerHTML = '';
+            const mk = (id, label, cnt) => {
+                const b = el('button', 'chip' + (activeCat === id ? ' active' : ''), label);
+                b.type = 'button';
+                b.appendChild(el('span', 'cnt', String(cnt)));
+                b.addEventListener('click', () => { activeCat = id; buildChips(); render(true); });
+                chipsEl.appendChild(b);
+            };
+            mk('all', '⭐ All', STYLES.length);
+            CATS.forEach(c => mk(c.id, c.icon + ' ' + c.name, counts[c.id]));
+        }
+
+        /* =====================================================
+           Theme toggle
+        ===================================================== */
+        function applyTheme(t) {
+            document.body.dataset.theme = t;
+            themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+        }
+        themeBtn.addEventListener('click', () => {
+            const next = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+            try { localStorage.setItem('ftg-theme', next); } catch (e) { /* ignore */ }
+            applyTheme(next);
+        });
+        let savedTheme = 'light';
+        try { savedTheme = localStorage.getItem('ftg-theme') || 'light'; } catch (e) { /* ignore */ }
+        applyTheme(savedTheme);
+
+        /* =====================================================
+           Events
+        ===================================================== */
+        function updateCharCount() {
+            charCount.textContent = String(textInput.value.length);
+            charCount.parentElement.classList.toggle('warn', textInput.value.length >= 80);
+            clearBtn.style.display = textInput.value ? 'flex' : 'none';
+        }
+
+        textInput.addEventListener('input', () => {
+            updateCharCount();
+            render(false);
+        });
+
+        clearBtn.addEventListener('click', () => {
+            textInput.value = '';
+            updateCharCount();
+            render(false);
+            textInput.focus();
+        });
+
+        searchInput.addEventListener('input', () => {
+            query = searchInput.value.trim().toLowerCase();
+            render(true);
+        });
+
+        /* =====================================================
+           Init
+        ===================================================== */
+        totalEl.textContent = String(STYLES.length);
+        updateCharCount();
+        buildChips();
+        render(true);
+    </script>
+</body>
+</html>
